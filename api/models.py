@@ -18,12 +18,11 @@ class Reservation(models.Model):
 
 	def clean(self, *args, **kwargs):
 		if self.datetime_from >= self.datetime_to:
-			raise ValidationError('Дата начала брони не может быть больше или равна дате окончания')
-
+			raise ValidationError({'error': ['Дата начала брони не может быть больше или равна дате окончания']})
 		# checking date intersection with exists reservations
 		workplace = Workplace.objects.get(pk=self.workplace.pk)
 		intersections = workplace.reservations.filter(Q(datetime_from__range=[self.datetime_from, self.datetime_to - timedelta(seconds=1)]) |
 		                                              Q(datetime_to__range=[self.datetime_from + timedelta(seconds=1), self.datetime_to]) |
 		                                              Q(datetime_from__lt=self.datetime_from, datetime_to__gt=self.datetime_to))
 		if intersections:
-			raise ValidationError('Введенные даты забронированы')
+			raise ValidationError({'error': ['Введенные даты забронированы']})
