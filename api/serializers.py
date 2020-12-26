@@ -21,10 +21,11 @@ class ReservationListSerializer(serializers.ModelSerializer):
 
 	class Meta:
 		model = Reservation
-		fields = ('workplace', 'datetime_from', 'datetime_to')
+		fields = ('workplace', 'reserved_from', 'reserved_to')
 
 
 class ReservationFreeTimeListSerializer(serializers.ModelSerializer):
+	workplace = serializers.IntegerField(source='workplace_id')
 
 	class Meta:
 		model = Reservation
