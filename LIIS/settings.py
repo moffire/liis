@@ -126,7 +126,3 @@ USE_TZ = False
 
 STATIC_URL = '/static/'
 
-# DATETIME_FORMAT = '%Y-%m-%d %H:%M'
-REST_FRAMEWORK = {
-    'DATETIME_FORMAT': "%d.%m.%Y %H:%M",
-}
