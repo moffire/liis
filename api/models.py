@@ -13,16 +13,16 @@ class Workplace(models.Model):
 
 class Reservation(models.Model):
 	workplace = models.ForeignKey(Workplace, on_delete=models.CASCADE, related_name='reservations', verbose_name='Рабочее место')
-	datetime_from = models.DateTimeField(verbose_name='Дата начала брони')
-	datetime_to = models.DateTimeField(verbose_name='Дата окончания брони')
+	reserved_from = models.DateTimeField(verbose_name='Дата начала брони')
+	reserved_to = models.DateTimeField(verbose_name='Дата окончания брони')
 
 	def clean(self, *args, **kwargs):
-		if self.datetime_from >= self.datetime_to:
+		if self.reserved_from >= self.reserved_to:
 			raise ValidationError({'error': ['Дата начала брони не может быть больше или равна дате окончания']})
 		# checking date intersection with exists reservations
 		workplace = Workplace.objects.get(pk=self.workplace.pk)
-		intersections = workplace.reservations.filter(Q(datetime_from__range=[self.datetime_from, self.datetime_to - timedelta(seconds=1)]) |
-		                                              Q(datetime_to__range=[self.datetime_from + timedelta(seconds=1), self.datetime_to]) |
-		                                              Q(datetime_from__lt=self.datetime_from, datetime_to__gt=self.datetime_to))
+		intersections = workplace.reservations.filter(Q(reserved_from__range=[self.reserved_from, self.reserved_to - timedelta(seconds=1)]) |
+		                                              Q(reserved_to__range=[self.reserved_from + timedelta(seconds=1), self.reserved_to]) |
+		                                              Q(reserved_from__lt=self.reserved_from, datetime_to__gt=self.reserved_to))
 		if intersections:
 			raise ValidationError({'error': ['Введенные даты забронированы']})
