@@ -1,5 +1,5 @@
 from rest_framework import serializers, fields
-from api.models import Reservation
+from api.models import Reservation, Workplace
 
 
 class ReservationCreateSerializer(serializers.ModelSerializer):
@@ -22,8 +22,8 @@ class ReservationListSerializer(serializers.ModelSerializer):
 
 
 class ReservationFreeTimeListSerializer(serializers.ModelSerializer):
-	workplace = serializers.IntegerField(source='workplace_id')
+	workplace = serializers.IntegerField(source='pk')
 
 	class Meta:
-		model = Reservation
+		model = Workplace
 		fields = ('workplace',)

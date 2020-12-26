@@ -5,7 +5,7 @@ from rest_framework.exceptions import ValidationError
 from rest_framework.permissions import IsAuthenticated, AllowAny
 
 from api.serializers import ReservationCreateSerializer, ReservationListSerializer, ReservationFreeTimeListSerializer
-from api.models import Reservation
+from api.models import Reservation, Workplace
 
 
 class ReservationCreateView(generics.CreateAPIView):
@@ -36,9 +36,11 @@ class ReservationFreeTimeListView(generics.ListAPIView):
 			except ValueError:
 				raise ValidationError({'error': ['Введенные даты не валидны']})
 
-			free_workplaces = Reservation.objects.exclude(Q(reserved_from__range = (parsed_start_date, parsed_end_date - timedelta(seconds=1))) |
-		                                        Q(reserved_to__range = (parsed_start_date + timedelta(seconds=1), parsed_end_date)) |
-		                                        Q(reserved_from__gte = parsed_start_date, reserved_to__lte=parsed_end_date))
-			return free_workplaces.values('workplace_id').distinct()
+			reserved_workplaces = Reservation.objects.filter(Q(reserved_from__range=(parsed_start_date, parsed_end_date - timedelta(seconds=1))) |
+			                                              Q(reserved_to__range=(parsed_start_date + timedelta(seconds=1), parsed_end_date)) |
+			                                              Q(reserved_from__gte=parsed_start_date, reserved_to__lte=parsed_end_date))\
+				.values_list('workplace_id', flat=True)\
+				.distinct()
+			return Workplace.objects.exclude(pk__in=reserved_workplaces)
 
-		return Reservation.objects.values('workplace_id').distinct()
+		return Workplace.objects.all()
