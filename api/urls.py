@@ -4,7 +4,7 @@ from api.views import ReservationCreateView, ReservationListView, ReservationFre
 app_name = 'api'
 
 urlpatterns = [
+	path('', ReservationFreeTimeListView.as_view()),
 	path('create/', ReservationCreateView.as_view()),
 	path('reservations/<int:pk>', ReservationListView.as_view()),
-	path('reservations/', ReservationFreeTimeListView.as_view()),
 ]

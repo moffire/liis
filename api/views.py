@@ -2,16 +2,19 @@ from rest_framework import generics
 from datetime import timedelta, datetime
 from django.db.models import Q
 from rest_framework.exceptions import ValidationError
+from rest_framework.permissions import IsAuthenticated, AllowAny
 
 from api.serializers import ReservationCreateSerializer, ReservationListSerializer, ReservationFreeTimeListSerializer
 from api.models import Reservation
 
 
 class ReservationCreateView(generics.CreateAPIView):
+	permission_classes = [IsAuthenticated]
 	serializer_class = ReservationCreateSerializer
 
 
 class ReservationListView(generics.ListAPIView):
+	permission_classes = [IsAuthenticated]
 	serializer_class = ReservationListSerializer
 
 	def get_queryset(self):
@@ -20,6 +23,7 @@ class ReservationListView(generics.ListAPIView):
 
 
 class ReservationFreeTimeListView(generics.ListAPIView):
+	permission_classes = [AllowAny]
 	serializer_class = ReservationFreeTimeListSerializer
 
 	def get_queryset(self):
@@ -36,3 +40,5 @@ class ReservationFreeTimeListView(generics.ListAPIView):
 		                                        Q(reserved_to__range = (parsed_start_date + timedelta(seconds=1), parsed_end_date)) |
 		                                        Q(reserved_from__gte = parsed_start_date, reserved_to__lte=parsed_end_date))
 			return free_workplaces.values('workplace_id').distinct()
+
+		return Reservation.objects.values('workplace_id').distinct()
