@@ -1,4 +1,4 @@
-# from django.core.exceptions import ValidationError
+from datetime import timedelta
 from django.db import models
 from django.db.models import Q
 from rest_framework.exceptions import ValidationError
@@ -17,15 +17,13 @@ class Reservation(models.Model):
 	datetime_to = models.DateTimeField(verbose_name='Дата окончания брони')
 
 	def clean(self, *args, **kwargs):
-		if self.datetime_from >= self.datetime_to :
+		if self.datetime_from >= self.datetime_to:
 			raise ValidationError('Дата начала брони не может быть больше или равна дате окончания')
 
 		# checking date intersection with exists reservations
 		workplace = Workplace.objects.get(pk=self.workplace.pk)
-		intersections = workplace.reservations.filter(Q(datetime_from__range=[self.datetime_from, self.datetime_to]) |
-		                                              Q(datetime_to__range=[self.datetime_from, self.datetime_to]) |
-		                                              Q(datetime_from__lte=self.datetime_from, datetime_to__gte=self.datetime_to))
+		intersections = workplace.reservations.filter(Q(datetime_from__range=[self.datetime_from, self.datetime_to - timedelta(seconds=1)]) |
+		                                              Q(datetime_to__range=[self.datetime_from + timedelta(seconds=1), self.datetime_to]) |
+		                                              Q(datetime_from__lt=self.datetime_from, datetime_to__gt=self.datetime_to))
 		if intersections:
 			raise ValidationError('Введенные даты забронированы')
-
-
