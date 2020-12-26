@@ -125,3 +125,8 @@ USE_TZ = False
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
 STATIC_URL = '/static/'
+
+# DATETIME_FORMAT = '%Y-%m-%d %H:%M'
+REST_FRAMEWORK = {
+    'DATETIME_FORMAT': "%d.%m.%Y %H:%M",
+}
