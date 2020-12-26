@@ -4,9 +4,6 @@ from api.models import Reservation
 
 class ReservationCreateSerializer(serializers.ModelSerializer):
 
-	datetime_from = fields.DateTimeField()
-	datetime_to = fields.DateTimeField()
-
 	def validate(self, attrs):
 		instance = Reservation(**attrs)
 		instance.clean()
