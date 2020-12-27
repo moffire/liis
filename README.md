@@ -17,6 +17,10 @@
 * Django 3.1.4
 * Django Rest Framework 3.12.2
 
+### Тестовый пользователь
+**username**: *test*<br>
+**password**: *test12345*
+
 ### Использование
 | URL       | Value                | Allowed methods | Response code |
 | :------------- |:------------------| :-----| :-----|
