@@ -22,6 +22,9 @@
 **password**: *test12345*<br>
 ![alt text](https://img.shields.io/static/v1?label=&message=AUTH&color=red "AUTH") - Метод требует аутентификации (**Base Authentication**)
 
+### Базовый URL
+https://mighty-harbor-59066.herokuapp.com/api/
+
 ### Использование
 | URL&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; | Description                | Allowed methods | Response code |
 | :-------- |:---------------------------| :---------------| :-------------|
