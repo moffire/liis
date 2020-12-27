@@ -7,21 +7,6 @@ from rest_framework.permissions import IsAuthenticated, AllowAny
 from api.serializers import ReservationCreateSerializer, ReservationListSerializer, ReservationFreeTimeListSerializer
 from api.models import Reservation, Workplace
 
-
-class ReservationCreateView(generics.CreateAPIView):
-	permission_classes = [IsAuthenticated]
-	serializer_class = ReservationCreateSerializer
-
-
-class ReservationListView(generics.ListAPIView):
-	permission_classes = [IsAuthenticated]
-	serializer_class = ReservationListSerializer
-
-	def get_queryset(self):
-		pk = self.kwargs.get('pk')
-		return Reservation.objects.filter(workplace__pk=pk)
-
-
 class ReservationFreeTimeListView(generics.ListAPIView):
 	permission_classes = [AllowAny]
 	serializer_class = ReservationFreeTimeListSerializer
@@ -44,3 +29,20 @@ class ReservationFreeTimeListView(generics.ListAPIView):
 			return Workplace.objects.exclude(pk__in=reserved_workplaces)
 
 		return Workplace.objects.all()
+
+
+class ReservationCreateView(generics.CreateAPIView):
+	permission_classes = [IsAuthenticated]
+	serializer_class = ReservationCreateSerializer
+
+
+class ReservationListView(generics.ListAPIView):
+	permission_classes = [IsAuthenticated]
+	serializer_class = ReservationListSerializer
+
+	def get_queryset(self):
+		pk = self.kwargs.get('pk')
+		if pk:
+			return Reservation.objects.filter(workplace__pk=pk)
+		else:
+			return Reservation.objects.all()
