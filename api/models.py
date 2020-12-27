@@ -1,4 +1,4 @@
-from datetime import timedelta
+from datetime import timedelta, datetime
 from django.db import models
 from django.db.models import Q
 from rest_framework.exceptions import ValidationError
@@ -24,5 +24,10 @@ class Reservation(models.Model):
 		intersections = workplace.reservations.filter(Q(reserved_from__range=[self.reserved_from, self.reserved_to - timedelta(seconds=1)]) |
 		                                              Q(reserved_to__range=[self.reserved_from + timedelta(seconds=1), self.reserved_to]) |
 		                                              Q(reserved_from__lt=self.reserved_from, reserved_to__gt=self.reserved_to))
+
 		if intersections:
 			raise ValidationError({'error': ['Введенные даты забронированы']})
+
+		# check if reservation dates is not in the past
+		if self.reserved_from < datetime.now():
+			raise ValidationError({'error': ['Дата начала брони не может быть раньше текущей даты']})
